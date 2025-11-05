@@ -1,103 +1,106 @@
-import Image from "next/image";
+'use client';
+
+import { GlobalOutlined, RocketOutlined, SafetyOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { Button, Card, Col, Divider, Row, Space, Typography } from 'antd';
+import Link from 'next/link';
+
+const { Title, Paragraph, Text } = Typography;
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const features = [
+    {
+      icon: <RocketOutlined style={{ fontSize: '48px', color: '#1890ff' }} />,
+      title: '快速开发',
+      description: '基于 Next.js 15 和 React 19，提供最佳的开发体验和构建性能',
+    },
+    {
+      icon: <ThunderboltOutlined style={{ fontSize: '48px', color: '#52c41a' }} />,
+      title: '高性能',
+      description: '使用服务器端渲染（SSR）和静态生成（SSG），确保最佳的页面加载速度',
+    },
+    {
+      icon: <SafetyOutlined style={{ fontSize: '48px', color: '#faad14' }} />,
+      title: '类型安全',
+      description: '全面使用 TypeScript，在开发阶段就能发现潜在问题，提高代码质量',
+    },
+    {
+      icon: <GlobalOutlined style={{ fontSize: '48px', color: '#f5222d' }} />,
+      title: '国际化',
+      description: '内置 Ant Design 5，支持多语言和主题定制，打造现代化的用户界面',
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+  return (
+    <div className="bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-20 text-center">
+        <Space direction="vertical" size="large" className="w-full">
+          <Title level={1} className="!text-5xl !font-bold">
+            欢迎来到 Next.js Pro
+          </Title>
+          <Paragraph className="!text-xl text-gray-600 max-w-2xl mx-auto">
+            使用最新的 Web 技术栈构建现代化应用
+            <br />
+            <Text type="secondary">Next.js 15 + React 19 + Ant Design 5 + TypeScript</Text>
+          </Paragraph>
+          <Space size="large">
+            <Link href="/about">
+              <Button type="primary" size="large" icon={<RocketOutlined />}>
+                了解更多
+              </Button>
+            </Link>
+            <Button size="large" href="https://nextjs.org" target="_blank">
+              查看文档
+            </Button>
+          </Space>
+        </Space>
+      </section>
+
+      <Divider />
+
+      {/* Features Section */}
+      <section className="container mx-auto px-4 py-16">
+        <Title level={2} className="text-center !mb-12">
+          核心特性
+        </Title>
+        <Row gutter={[32, 32]}>
+          {features.map((feature, index) => (
+            <Col xs={24} sm={12} lg={6} key={index}>
+              <Card
+                hoverable
+                className="h-full text-center"
+                bodyStyle={{ padding: '40px 24px' }}
+              >
+                <Space direction="vertical" size="middle" className="w-full">
+                  <div>{feature.icon}</div>
+                  <Title level={4}>{feature.title}</Title>
+                  <Paragraph type="secondary">{feature.description}</Paragraph>
+                </Space>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-4 py-20 text-center">
+        <Card className="bg-gradient-to-r from-blue-500 to-purple-600 border-none">
+          <Space direction="vertical" size="large" className="w-full">
+            <Title level={2} className="!text-white">
+              准备好开始了吗？
+            </Title>
+            <Paragraph className="!text-white !text-lg">
+              立即开始使用我们的现代化技术栈构建您的下一个项目
+            </Paragraph>
+            <Link href="/about">
+              <Button type="default" size="large">
+                联系我们
+              </Button>
+            </Link>
+          </Space>
+        </Card>
+      </section>
     </div>
   );
 }
+

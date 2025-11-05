@@ -1,36 +1,128 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Pro
 
-## Getting Started
+使用最新技术栈构建的现代化 Web 应用。
 
-First, run the development server:
+## 技术栈
+
+- **Next.js 15** - React 框架，支持 SSR 和 SSG
+- **React 19** - 最新版本的 React
+- **TypeScript** - 类型安全的 JavaScript
+- **Ant Design 5** - 企业级 UI 组件库
+- **Tailwind CSS 4** - 实用优先的 CSS 框架
+
+## 功能特性
+
+- ✅ 服务端渲染（SSR）
+- ✅ 静态站点生成（SSG）
+- ✅ 响应式设计
+- ✅ TypeScript 全覆盖
+- ✅ Ant Design 组件集成
+- ✅ Standalone 模式部署支持
+- ✅ 页面路由导航
+
+## 项目结构
+
+```
+nextjs-pro/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # 根布局
+│   │   ├── page.tsx            # 首页
+│   │   ├── about/
+│   │   │   └── page.tsx        # 关于我们页面
+│   │   └── globals.css         # 全局样式
+│   └── components/
+│       ├── AntdRegistry.tsx    # Ant Design 配置
+│       ├── Header.tsx          # 导航栏组件
+│       └── Footer.tsx          # 页脚组件
+├── public/                     # 静态资源
+├── next.config.ts              # Next.js 配置
+├── tailwind.config.ts          # Tailwind CSS 配置
+├── tsconfig.json               # TypeScript 配置
+└── package.json                # 项目依赖
+```
+
+## 开始使用
+
+### 安装依赖
+
+```bash
+npm install
+```
+
+### 开发模式
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+在浏览器中打开 [http://localhost:3000](http://localhost:3000) 查看应用。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 生产构建
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+```
 
-## Learn More
+构建完成后，会在 `.next/standalone` 目录生成可部署的应用。
 
-To learn more about Next.js, take a look at the following resources:
+### 启动生产服务器
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run start
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 代码检查
 
-## Deploy on Vercel
+```bash
+npm run lint
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Standalone 部署
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+项目已配置为 standalone 模式，构建后可以独立部署：
+
+```bash
+# 构建项目
+npm run build
+
+# 复制静态资源和服务器文件
+cp -r public .next/standalone/
+cp -r .next/static .next/standalone/.next/
+
+# 在服务器上运行
+cd .next/standalone
+node server.js
+```
+
+## 页面说明
+
+### 首页 (`/`)
+
+- Hero 区域展示
+- 核心特性介绍
+- CTA 行动号召
+
+### 关于我们 (`/about`)
+
+- 公司信息展示
+- 团队成员介绍
+- 发展历程时间线
+- 核心价值观
+
+## 环境要求
+
+- Node.js 18.17 或更高版本
+- npm 或 yarn 或 pnpm
+
+## 部署
+
+本项目可以部署到以下平台：
+
+- Vercel
+- Docker
+- 自建服务器（使用 standalone 模式）
+
+## 许可证
+
+MIT
