@@ -3,29 +3,23 @@ FROM node:20-alpine AS base
 
 # 安装依赖阶段
 FROM base AS deps
-# 设置 pnpm 环境变量
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
 WORKDIR /app
 
-# 启用 corepack 并安装 pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# 启用 corepack 并安装 yarn 1.x (classic)
+RUN corepack enable && corepack prepare yarn@1 --activate
 
 # 复制依赖配置文件
-COPY package.json pnpm-lock.yaml* package-lock.json* yarn.lock* .npmrc* .yarnrc* ./
+COPY package.json yarn.lock .yarnrc .npmrc ./
 
-# 根据锁文件安装依赖
-RUN \
-  if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; \
-  elif [ -f yarn.lock ]; then yarn install --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
+# 安装依赖
+RUN yarn install --frozen-lockfile
 
 # 构建阶段
 FROM base AS builder
 WORKDIR /app
+
+# 启用 corepack 并安装 yarn 1.x (classic)
+RUN corepack enable && corepack prepare yarn@1 --activate
 
 # 从依赖阶段复制 node_modules
 COPY --from=deps /app/node_modules ./node_modules
@@ -35,7 +29,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # 构建应用
-RUN npm run build
+RUN yarn build
 
 # 生产运行阶段
 FROM base AS runner
