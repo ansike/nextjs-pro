@@ -12,10 +12,10 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}========================================${NC}"
-echo -e "${GREEN}   Next.js Docker 镜像构建脚本${NC}"
-echo -e "${GREEN}   (支持多架构)${NC}"
-echo -e "${GREEN}========================================${NC}"
+printf "${GREEN}========================================${NC}\n"
+printf "${GREEN}   Next.js Docker 镜像构建脚本${NC}\n"
+printf "${GREEN}   (支持多架构)${NC}\n"
+printf "${GREEN}========================================${NC}\n"
 echo ""
 
 # 获取项目名称和版本
@@ -23,18 +23,21 @@ PROJECT_NAME="nextjs-pro"
 VERSION=$(node -p "require('./package.json').version")
 
 # 多架构平台支持
-PLATFORMS="linux/amd64,linux/arm64"
+# PLATFORMS="linux/amd64,linux/arm64"
+PLATFORMS="linux/amd64"  # 只构建 amd64，避免网络问题
 
 # 检查是否推送到远程仓库
 PUSH_FLAG=""
-if [[ "$*" == *"--push"* ]]; then
-    PUSH_FLAG="--push"
-    echo -e "${BLUE}注意: 将推送镜像到远程仓库${NC}"
-    echo ""
-fi
+case "$*" in
+    *--push*)
+        PUSH_FLAG="--push"
+        printf "${BLUE}注意: 将推送镜像到远程仓库${NC}\n"
+        echo ""
+        ;;
+esac
 
 # 设置镜像标签
-if [ -z "$1" ] || [[ "$1" == "--push" ]]; then
+if [ -z "$1" ] || [ "$1" = "--push" ]; then
     IMAGE_TAG="${PROJECT_NAME}:${VERSION}"
     IMAGE_TAG_LATEST="${PROJECT_NAME}:latest"
 else
@@ -42,40 +45,40 @@ else
     IMAGE_TAG_LATEST="${PROJECT_NAME}:latest"
 fi
 
-echo -e "${YELLOW}镜像名称:${NC} ${IMAGE_TAG}"
-echo -e "${YELLOW}镜像名称:${NC} ${IMAGE_TAG_LATEST}"
-echo -e "${YELLOW}支持架构:${NC} ${PLATFORMS}"
+printf "${YELLOW}镜像名称:${NC} ${IMAGE_TAG}\n"
+printf "${YELLOW}镜像名称:${NC} ${IMAGE_TAG_LATEST}\n"
+printf "${YELLOW}支持架构:${NC} ${PLATFORMS}\n"
 echo ""
 
 # 检查 Dockerfile 是否存在
 if [ ! -f "Dockerfile" ]; then
-    echo -e "${RED}错误: Dockerfile 不存在${NC}"
+    printf "${RED}错误: Dockerfile 不存在${NC}\n"
     exit 1
 fi
 
 # 检查 docker buildx 是否可用
-if ! docker buildx version &> /dev/null; then
-    echo -e "${RED}错误: docker buildx 不可用${NC}"
-    echo -e "${YELLOW}请确保 Docker 版本 >= 19.03 并启用 buildx${NC}"
+if ! docker buildx version > /dev/null 2>&1; then
+    printf "${RED}错误: docker buildx 不可用${NC}\n"
+    printf "${YELLOW}请确保 Docker 版本 >= 19.03 并启用 buildx${NC}\n"
     exit 1
 fi
 
 # 创建或使用 buildx builder
 BUILDER_NAME="multiarch-builder"
 if ! docker buildx ls | grep -q "${BUILDER_NAME}"; then
-    echo -e "${YELLOW}创建新的 buildx builder: ${BUILDER_NAME}${NC}"
+    printf "${YELLOW}创建新的 buildx builder: ${BUILDER_NAME}${NC}\n"
     docker buildx create --name "${BUILDER_NAME}" --driver docker-container --use
     docker buildx inspect --bootstrap
     echo ""
 else
-    echo -e "${YELLOW}使用现有的 buildx builder: ${BUILDER_NAME}${NC}"
+    printf "${YELLOW}使用现有的 buildx builder: ${BUILDER_NAME}${NC}\n"
     docker buildx use "${BUILDER_NAME}"
     echo ""
 fi
 
 # 开始构建
-echo -e "${GREEN}开始构建多架构 Docker 镜像...${NC}"
-echo -e "${BLUE}这可能需要几分钟时间，请耐心等待...${NC}"
+printf "${GREEN}开始构建多架构 Docker 镜像...${NC}\n"
+printf "${BLUE}这可能需要几分钟时间，请耐心等待...${NC}\n"
 echo ""
 
 # 根据是否推送选择不同的构建策略
@@ -90,7 +93,7 @@ if [ -n "${PUSH_FLAG}" ]; then
         .
 else
     # 本地构建（构建当前架构 + arm64）
-    echo -e "${BLUE}本地多架构构建...${NC}"
+    printf "${BLUE}本地多架构构建...${NC}\n"
     docker buildx build \
         --platform "${PLATFORMS}" \
         -t "${IMAGE_TAG}" \
@@ -99,7 +102,7 @@ else
         .
     
     echo ""
-    echo -e "${YELLOW}加载当前架构镜像到本地...${NC}"
+    printf "${YELLOW}加载当前架构镜像到本地...${NC}\n"
     # 单独构建当前架构的镜像并加载到本地
     CURRENT_ARCH=$(uname -m)
     if [ "${CURRENT_ARCH}" = "x86_64" ]; then
@@ -119,32 +122,24 @@ else
         .
 fi
 
-# 检查构建是否成功
-if [ $? -eq 0 ]; then
+# 构建成功（由于 set -e，如果构建失败脚本已经退出）
+echo ""
+printf "${GREEN}========================================${NC}\n"
+printf "${GREEN}   镜像构建成功！${NC}\n"
+printf "${GREEN}========================================${NC}\n"
+echo ""
+printf "${YELLOW}镜像标签:${NC}\n"
+echo "  - ${IMAGE_TAG}"
+echo "  - ${IMAGE_TAG_LATEST}"
+echo ""
+printf "${YELLOW}支持的架构:${NC} ${PLATFORMS}\n"
+echo ""
+if [ -z "${PUSH_FLAG}" ]; then
+    printf "${YELLOW}本地镜像信息:${NC}\n"
+    docker images | grep "${PROJECT_NAME}" || true
     echo ""
-    echo -e "${GREEN}========================================${NC}"
-    echo -e "${GREEN}   镜像构建成功！${NC}"
-    echo -e "${GREEN}========================================${NC}"
-    echo ""
-    echo -e "${YELLOW}镜像标签:${NC}"
-    echo -e "  - ${IMAGE_TAG}"
-    echo -e "  - ${IMAGE_TAG_LATEST}"
-    echo ""
-    echo -e "${YELLOW}支持的架构:${NC} ${PLATFORMS}"
-    echo ""
-    if [ -z "${PUSH_FLAG}" ]; then
-        echo -e "${YELLOW}本地镜像信息:${NC}"
-        docker images | grep "${PROJECT_NAME}"
-        echo ""
-    fi
-    echo -e "${YELLOW}运行镜像:${NC}"
-    echo -e "  ./shell/run.sh"
-    echo ""
-else
-    echo ""
-    echo -e "${RED}========================================${NC}"
-    echo -e "${RED}   镜像构建失败！${NC}"
-    echo -e "${RED}========================================${NC}"
-    exit 1
 fi
+printf "${YELLOW}运行镜像:${NC}\n"
+echo "  ./shell/run.sh"
+echo ""
 
