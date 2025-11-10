@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  nextjs-pro:
+    image: nextjs-pro:0.1.0
+    container_name: nextjs-pro-test-composer
+    restart: unless-stopped
+    ports:
+      - "8002:3000"
+    environment:
+      - NODE_ENV=production
+    # 如果需要持久化数据，可以取消注释下面的 volumes
+    # volumes:
+    #   - ./data:/app/data
+    # 如果需要健康检查，可以取消注释下面的配置
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:3000"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+    #   start_period: 40s
+
