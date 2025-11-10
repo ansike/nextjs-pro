@@ -1,0 +1,14 @@
+apiVersion: v2
+name: nextjs-pro
+description: A Helm chart for Next.js Pro application
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - nextjs
+  - web
+  - application
+maintainers:
+  - name: nextjs-pro team
+home: https://github.com/yourusername/nextjs-pro
+
