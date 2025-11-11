@@ -1,9 +1,6 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // 启用 standalone 模式用于生产部署
-  output: 'standalone',
-  
   // 启用严格模式
   reactStrictMode: true,
   

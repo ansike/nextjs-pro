@@ -39,16 +39,24 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# 启用 corepack 并安装 yarn 1.x (classic)
+RUN corepack enable && corepack prepare yarn@1 --activate
+
 # 创建非 root 用户
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# 复制 public 文件夹
-COPY --from=builder /app/public ./public
+# 复制 package.json 和 yarn.lock
+COPY --chown=nextjs:nodejs package.json yarn.lock ./
 
-# 复制 standalone 输出
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# 复制 node_modules（从 deps 阶段）
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# 复制 public 文件夹
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+
+# 复制完整的 .next 构建输出
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
 
 # 切换到非 root 用户
 USER nextjs
@@ -61,5 +69,5 @@ ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
 # 启动应用
-CMD ["node", "server.js"]
+CMD ["yarn", "start"]
 
