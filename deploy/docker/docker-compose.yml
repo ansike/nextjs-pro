@@ -3,7 +3,7 @@ version: '3.8'
 services:
   nextjs-pro:
     image: nextjs-pro:0.1.0
-    container_name: nextjs-pro-test-composer
+    container_name: nextjs-pro-compose
     restart: unless-stopped
     ports:
       - "8002:3000"
