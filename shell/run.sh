@@ -16,14 +16,16 @@ echo -e "${GREEN}   Next.js Docker 容器运行脚本${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo ""
 
+VERSION=$(node -p "require('./package.json').version")
+
 # 配置参数
 PROJECT_NAME="nextjs-pro"
-IMAGE_NAME="${PROJECT_NAME}:latest"
+IMAGE_NAME="${PROJECT_NAME}:${VERSION}"
 CONTAINER_NAME="${PROJECT_NAME}-container"
 
 # 设置端口
 if [ -z "$1" ]; then
-    HOST_PORT=3000
+    HOST_PORT=8001
 else
     HOST_PORT=$1
 fi
