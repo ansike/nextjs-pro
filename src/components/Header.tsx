@@ -13,7 +13,7 @@ export default function Header() {
     {
       key: '/',
       icon: <HomeOutlined />,
-      label: <Link href="/">首页</Link>,
+      label: <Link href="/">首页 V0.2.0</Link>,
     },
     {
       key: '/about',
